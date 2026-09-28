@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Free Age Calculator - Calculate Your Exact Age</title>
+<meta name="description" content="Free online age calculator. Calculate your exact age in years, months and days.">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    color: #172033;
+    min-height: 100vh;
+}
+
+.container {
+    width: 92%;
+    max-width: 700px;
+    margin: 60px auto;
+}
+
+.card {
+    background: white;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+}
+
+h1 {
+    text-align: center;
+    margin-top: 0;
+    font-size: 34px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 30px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #4f46e5;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #4338ca;
+}
+
+.result {
+    display: none;
+    margin-top: 30px;
+    padding: 25px;
+    border-radius: 15px;
+    background: #f1f5f9;
+}
+
+.result h2 {
+    text-align: center;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.result-box {
+    background: white;
+    padding: 18px 10px;
+    text-align: center;
+    border-radius: 12px;
+}
+
+.number {
+    display: block;
+    font-size: 28px;
+    font-weight: bold;
+    color: #4f46e5;
+}
+
+.small {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.error {
+    color: #dc2626;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.info {
+    margin-top: 35px;
+    line-height: 1.7;
+    color: #475569;
+}
+
+footer {
+    text-align: center;
+    margin-top: 25px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+@media (max-width: 500px) {
+    .container {
+        margin: 25px auto;
+    }
+
+    .card {
+        padding: 22px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .result-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>Age Calculator</h1>
+
+        <p class="subtitle">
+            Calculate your exact age in years, months and days.
+        </p>
+
+        <label for="birthDate">Enter your date of birth</label>
+
+        <input type="date" id="birthDate">
+
+        <button onclick="calculateAge()">
+            Calculate My Age
+        </button>
+
+        <div id="error" class="error"></div>
+
+        <div id="result" class="result">
+
+            <h2>Your Exact Age</h2>
+
+            <div class="result-grid">
+
+                <div class="result-box">
+                    <span id="years" class="number">0</span>
+                    <span class="small">Years</span>
+                </div>
+
+                <div class="result-box">
+                    <span id="months" class="number">0</span>
+                    <span class="small">Months</span>
+                </div>
+
+                <div class="result-box">
+                    <span id="days" class="number">0</span>
+                    <span class="small">Days</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="info">
+
+            <h2>How does the Age Calculator work?</h2>
+
+            <p>
+                Enter your date of birth and click the calculate button.
+                The calculator automatically calculates your current age
+                based on today's date.
+            </p>
+
+            <h2>Why use this calculator?</h2>
+
+            <p>
+                This free online age calculator is simple, fast and
+                works on both mobile phones and computers.
+            </p>
+
+        </div>
+
+    </div>
+
+    <footer>
+        Free Age Calculator
+    </footer>
+
+</div>
+
+<script>
+
+function calculateAge() {
+
+    const birthInput = document.getElementById("birthDate");
+    const birthDate = new Date(birthInput.value);
+
+    const result = document.getElementById("result");
+    const error = document.getElementById("error");
+
+    error.textContent = "";
+
+    if (!birthInput.value) {
+        result.style.display = "none";
+        error.textContent = "Please enter your date of birth.";
+        return;
+    }
+
+    const today = new Date();
+
+    if (birthDate > today) {
+        result.style.display = "none";
+        error.textContent = "Date of birth cannot be in the future.";
+        return;
+    }
+
+    let years = today.getFullYear() - birthDate.getFullYear();
+    let months = today.getMonth() - birthDate.getMonth();
+    let days = today.getDate() - birthDate.getDate();
+
+    if (days < 0) {
+
+        months--;
+
+        const previousMonth = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            0
+        );
+
+        days += previousMonth.getDate();
+    }
+
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+
+    document.getElementById("years").textContent = years;
+    document.getElementById("months").textContent = months;
+    document.getElementById("days").textContent = days;
+
+    result.style.display = "block";
+}
+
+</script>
+
+</body>
+</html>
